@@ -18,7 +18,7 @@ class Kyoku:
         self.current_step = 0
         self.teban = []
         self.is_sutehai = False
-        self.sutehai = 0
+        self.sutehai = []
 
         # fmt: off
         self.commands = {

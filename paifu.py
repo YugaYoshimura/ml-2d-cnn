@@ -53,8 +53,8 @@ def show_kyoku(kyoku_data):
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
-            #print("--------------------")
-            #kyoku.show()
+            print("--------------------")
+            kyoku.show()
             trdata = kyoku.make_tr_data()
         playing = kyoku.step()
         if kyoku.is_sutehai:

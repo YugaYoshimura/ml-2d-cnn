@@ -1,4 +1,4 @@
-from const_pai import code2disphai
+from const_pai import code2disphai, code2hai
 
 sutehai_flags = {
     "tedashi": 0,
@@ -35,29 +35,29 @@ class Player:
 
     def do_sutehai(self, sutehai, tsumogiri):
         self.sutehai.append(sutehai)
+        
         if tsumogiri:
             self.sutehai_flags.append(sutehai_flags["tsumogiri"])
-            self.tsumo = 0
         else:
             if 0 < self.tsumo:
                 self.tehai.append(self.tsumo)
-                self.tehai.remove(sutehai)
-                self.sutehai_flags.append(sutehai_flags["tedashi"])
-                self.tsumo = 0
-                self.tsumogiri = tsumogiri
-                self.do_ripai()
-    
+                #if sutehai not in self.tehai:
+                 #   raise ValueError(f"エラー: ツモ牌{code2disphai[sutehai]}が手牌にありません")
+            self.tehai.remove(sutehai)
+            self.sutehai_flags.append(sutehai_flags["tedashi"])
+        self.tsumo = 0
+        self.tsumogiri = tsumogiri
+        self.do_ripai()
+
     def do_richi(self):
         self.richi = True
         self.sutehai_flags[-1] += sutehai_flags["richi"]
 
     def do_open_kakan(self, tedashi, naki):
-        if self.kyoku.teban[-2] != self:
-            # self.kyoku.teban[-2].sutehai.pop() # remove the last sutehai
-            self.kyoku.teban[-2].sutehai_flags[-1] += sutehai_flags["naki"]
-        else:
-            self.tehai.remove(naki)
-            self.tsumo = 0
+        if 0 < self.tsumo:
+            self.tehai.append(self.tsumo)
+        self.tsumo = 0
+        self.tehai.remove(naki)
         self.furo.append(naki)
 
     def do_open_ankan(self, tedashi, naki):
