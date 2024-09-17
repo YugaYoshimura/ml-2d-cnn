@@ -53,12 +53,12 @@ def show_kyoku(kyoku_data):
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
-            print("--------------------")
-            kyoku.show()
+            #print("--------------------")
+            #kyoku.show()
             trdata = kyoku.make_tr_data()
         playing = kyoku.step()
         if kyoku.is_sutehai:
-            print(f"sutehai: {code2disphai[kyoku.sutehai]}")
+            #print(f"sutehai: {code2disphai[kyoku.sutehai]}")
             sutehai = kyoku.sutehai
             all_data.append([trdata,sutehai])
         if not playing:
@@ -82,6 +82,7 @@ if __name__ == "__main__":
     for file in args.files:
         json_data = load_paifu(file)
         #print(count_kyoku(json_data))
+        print(f"file: {file}")
     
         for kyoku_num in range(count_kyoku(json_data)):
             print(f"kyoku_num: {kyoku_num} =======================")
@@ -102,6 +103,5 @@ if __name__ == "__main__":
                 #print(show_kyoku(kyoku_data))
                 #print(train_kyoku_data)
 """
-
 
 
