@@ -18,6 +18,7 @@ class Kyoku:
         self.current_step = 0
         self.teban = []
         self.is_sutehai = False
+        self.sutehai = 0
 
         # fmt: off
         self.commands = {
@@ -55,6 +56,7 @@ class Kyoku:
         return playing
 
     def check_sutehai(self):
+        self.is_sutehai = False
         entry = self.kyoku_data[self.current_step]
         if entry["cmd"] == "sutehai":
             self.is_sutehai = True
@@ -93,6 +95,7 @@ class Kyoku:
         sutehai_code = code2hai.index(args[1])
         tsumogiri = True if len(args) == 3 and args[2] == "tsumogiri" else False
         player.do_sutehai(sutehai_code, tsumogiri)
+        self.sutehai = sutehai_code
         return True
 
     def do_dora(self, args):

@@ -37,6 +37,7 @@ class Player:
         self.sutehai.append(sutehai)
         if tsumogiri:
             self.sutehai_flags.append(sutehai_flags["tsumogiri"])
+            self.tsumo = 0
         else:
             if 0 < self.tsumo:
                 self.tehai.append(self.tsumo)

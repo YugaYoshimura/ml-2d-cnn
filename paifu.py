@@ -1,7 +1,9 @@
 import json
 import argparse
+import pickle
 
 from kyoku import Kyoku
+from const_pai import code2disphai
 
 
 def parse_args():
@@ -45,23 +47,34 @@ def extract_one_kyoku(json_data, kyoku_num):
     return kyoku
 
 
-def show_kyoku(entry):
+def show_kyoku(kyoku_data):
     all_data = []
-    #print(entry)
-    #print("---------------------------")
     kyoku = Kyoku(kyoku_data)
-    #print(kyoku)
-    #print(kyoku.show())
-    print(f"{kyoku.is_sutehai}")
-    if kyoku.is_sutehai == True:
-        print("---------------------------")
-        print(f"{kyoku.show()}")
-        kyoku.show()
-        trdata = kyoku.make_tr_data()
-        print(trdata)
-        all_data.append([trdata, "sutehai"])
+    while True:
+        kyoku.check_sutehai()
+        if kyoku.is_sutehai:
+            print("--------------------")
+            kyoku.show()
+            trdata = kyoku.make_tr_data()
+        playing = kyoku.step()
+        if kyoku.is_sutehai:
+            print(f"sutehai: {code2disphai[kyoku.sutehai]}")
+            sutehai = kyoku.sutehai
+            all_data.append([trdata,sutehai])
+        if not playing:
+            break
     return all_data
 
+
+"""
+        print(f"{kyoku.is_sutehai}")
+        if kyoku.is_sutehai == True:
+            kyoku.show()
+            trdata = kyoku.make_tr_data()
+            all_data.append([trdata, "sutehai"])
+            kyoku.is_sutehai = False
+        return all_data
+"""
 
 if __name__ == "__main__":
     args = parse_args()
@@ -71,9 +84,16 @@ if __name__ == "__main__":
         #print(count_kyoku(json_data))
     
         for kyoku_num in range(count_kyoku(json_data)):
+            print(f"kyoku_num: {kyoku_num} =======================")
             kyoku_data = extract_one_kyoku(json_data, kyoku_num)
-            #print(len(kyoku_data))
-            
+            train_kyoku_data = show_kyoku(kyoku_data)
+            hoge.extend(train_kyoku_data)
+    
+    #print(hoge)
+    with open("data.pkl", "wb") as f:
+        pickle.dump(hoge, f)
+    
+"""
             for entry in kyoku_data:
                 #print(entry)
                 #print(entry["cmd"])
@@ -81,7 +101,7 @@ if __name__ == "__main__":
                 hoge.extend(train_kyoku_data)
                 #print(show_kyoku(kyoku_data))
                 #print(train_kyoku_data)
-
+"""
 
 
 
