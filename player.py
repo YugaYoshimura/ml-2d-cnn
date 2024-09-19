@@ -43,6 +43,8 @@ class Player:
                 self.tehai.append(self.tsumo)
                 #if sutehai not in self.tehai:
                  #   raise ValueError(f"エラー: ツモ牌{code2disphai[sutehai]}が手牌にありません")
+                if sutehai not in self.tehai:
+                    raise ValueError(f"エラー: ツモ牌{sutehai}が手牌にありません (id: {entry_id}, tehai: {self.tehai})")
             self.tehai.remove(sutehai)
             self.sutehai_flags.append(sutehai_flags["tedashi"])
         self.tsumo = 0

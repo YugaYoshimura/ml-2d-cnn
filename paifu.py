@@ -53,8 +53,8 @@ def show_kyoku(kyoku_data):
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
-            print("--------------------")
-            kyoku.show()
+            #print("--------------------")
+            #kyoku.show()
             trdata = kyoku.make_tr_data()
         playing = kyoku.step()
         if kyoku.is_sutehai:
@@ -66,15 +66,7 @@ def show_kyoku(kyoku_data):
     return all_data
 
 
-"""
-        print(f"{kyoku.is_sutehai}")
-        if kyoku.is_sutehai == True:
-            kyoku.show()
-            trdata = kyoku.make_tr_data()
-            all_data.append([trdata, "sutehai"])
-            kyoku.is_sutehai = False
-        return all_data
-"""
+
 
 if __name__ == "__main__":
     args = parse_args()
@@ -94,14 +86,4 @@ if __name__ == "__main__":
     with open("data.pkl", "wb") as f:
         pickle.dump(hoge, f)
     
-"""
-            for entry in kyoku_data:
-                #print(entry)
-                #print(entry["cmd"])
-                train_kyoku_data = show_kyoku(entry)
-                hoge.extend(train_kyoku_data)
-                #print(show_kyoku(kyoku_data))
-                #print(train_kyoku_data)
-"""
-
 
