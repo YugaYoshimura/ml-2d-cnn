@@ -20,6 +20,7 @@ class Player:
         self.point = 0
         self.kaze = 0
         self.kyoku = kyoku
+        self.errors = [] # エラーを記録するリスト
 
     def do_ripai(self):
         self.tehai.sort()
@@ -30,27 +31,25 @@ class Player:
 
     def do_tsumo(self, tsumo):
         self.tsumo = tsumo
-        # self.tehai.append(tsumo)
         self.tsumogiri = False
 
-    def do_sutehai(self, sutehai, tsumogiri):
+    def do_sutehai(self, sutehai, tsumogiri):     
         self.sutehai.append(sutehai)
-        
         if tsumogiri:
             self.sutehai_flags.append(sutehai_flags["tsumogiri"])
         else:
             if 0 < self.tsumo:
                 self.tehai.append(self.tsumo)
                 #if sutehai not in self.tehai:
-                 #   raise ValueError(f"エラー: ツモ牌{code2disphai[sutehai]}が手牌にありません")
+                    #raise ValueError(f"エラー: ツモ牌{code2disphai[sutehai]}が手牌にありません")
                 if sutehai not in self.tehai:
-                    raise ValueError(f"エラー: ツモ牌{sutehai}が手牌にありません (id: {entry_id}, tehai: {self.tehai})")
+                    raise ValueError(f"エラー: ツモ牌{sutehai}が手牌にありません (tehai: {self.tehai})")
             self.tehai.remove(sutehai)
             self.sutehai_flags.append(sutehai_flags["tedashi"])
         self.tsumo = 0
         self.tsumogiri = tsumogiri
         self.do_ripai()
-
+        
     def do_richi(self):
         self.richi = True
         self.sutehai_flags[-1] += sutehai_flags["richi"]
@@ -63,11 +62,10 @@ class Player:
         self.furo.append(naki)
 
     def do_open_ankan(self, tedashi, naki):
+        self.tehai.append(self.tsumo)
+        self.tsumo = 0
         for hai in tedashi:
-            if hai in self.tehai:
-                self.tehai.remove(hai)
-            elif hai == self.tsumo:
-                self.tsumo = 0
+            self.tehai.remove(hai)    
             self.furo.append(hai)
 
     def do_open_ponchi(self, tedashi, naki):

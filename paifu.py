@@ -53,8 +53,8 @@ def show_kyoku(kyoku_data):
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
-            #print("--------------------")
-            #kyoku.show()
+            print("--------------------")
+            kyoku.show()
             trdata = kyoku.make_tr_data()
         playing = kyoku.step()
         if kyoku.is_sutehai:
@@ -66,8 +66,7 @@ def show_kyoku(kyoku_data):
     return all_data
 
 
-
-
+#エラーで止める方
 if __name__ == "__main__":
     args = parse_args()
     hoge = []
@@ -81,9 +80,38 @@ if __name__ == "__main__":
             kyoku_data = extract_one_kyoku(json_data, kyoku_num)
             train_kyoku_data = show_kyoku(kyoku_data)
             hoge.extend(train_kyoku_data)
-    
+
     #print(hoge)
     with open("data.pkl", "wb") as f:
         pickle.dump(hoge, f)
-    
 
+"""
+
+#エラーを無視して進める方
+if __name__ == "__main__":
+    args = parse_args()
+    hoge = []
+    E = []
+    for file in args.files:
+        json_data = load_paifu(file)
+        print(f"file: {file}")
+    
+        for kyoku_num in range(count_kyoku(json_data)):
+            try:
+                print(f"kyoku_num: {kyoku_num} =======================")
+                kyoku_data = extract_one_kyoku(json_data, kyoku_num)
+                train_kyoku_data = show_kyoku(kyoku_data)
+                hoge.extend(train_kyoku_data)
+            except Exception as e:
+                print(f"Error: {e} kyoku_num: {kyoku_num}")
+                E.append(kyoku_num)
+                E.append(file)
+                E.append(e)
+                continue
+    print(E)
+
+    #print(hoge)
+    with open("data.pkl", "wb") as f:
+        pickle.dump(hoge, f)
+
+"""
