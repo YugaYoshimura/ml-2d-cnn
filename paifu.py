@@ -53,8 +53,8 @@ def show_kyoku(kyoku_data):
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
-            print("--------------------")
-            kyoku.show()
+            #print("--------------------")
+            #kyoku.show()
             trdata = kyoku.make_tr_data()
         playing = kyoku.step()
         if kyoku.is_sutehai:
@@ -65,7 +65,7 @@ def show_kyoku(kyoku_data):
             break
     return all_data
 
-
+"""
 #エラーで止める方
 if __name__ == "__main__":
     args = parse_args()
@@ -114,4 +114,4 @@ if __name__ == "__main__":
     with open("data.pkl", "wb") as f:
         pickle.dump(hoge, f)
 
-"""
+
