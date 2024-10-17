@@ -20,7 +20,7 @@ args = parse_arg()
 save_folder = args.save_folder
 
 # TensorFlowのログレベルを変更
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 0 = 全て表示, 1 = INFOを非表示, 2 = WARNINGを非表示, 3 = ERRORを非表示
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0 = 全て表示, 1 = INFOを非表示, 2 = WARNINGを非表示, 3 = ERRORを非表示
 
 
 # 多クラス分類として学習する場合
@@ -100,7 +100,9 @@ input_shape = train_x.shape[1:]
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Conv1D(32, 5, activation='relu',input_shape=input_shape))
 model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
-model.add(tf.keras.layers.Conv1D(32, 5, activation='relu'))
+model.add(tf.keras.layers.Conv1D(64, 5, activation='relu'))
+model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
+model.add(tf.keras.layers.Conv1D(128, 5, activation='relu'))
 model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
 # model.add(tf.keras.layers.Dense(16,activation='relu'))
 model.add(tf.keras.layers.Flatten())
@@ -111,6 +113,7 @@ else:
   model.add(tf.keras.layers.Dense(1))
   model.compile(loss = "mse", optimizer="adam")
 
+"""
 
 # 学習前のモデルで予測したものをプロットしてみる
 if CATEGORICAL:
@@ -128,10 +131,12 @@ else:
   plt.legend()
 plt.savefig(f"{save_folder}/before_learning.png")  # プロットを保存
 
-exit(-1)     
+# exit(-1)     
+
+"""
 
 # 学習させる
-hist = model.fit(train_x, train_y, batch_size=16, epochs=100, verbose=1)
+hist = model.fit(train_x, train_y, batch_size=16, epochs=1, verbose=1)
 history = hist.history
 plt.scatter(hist.epoch, history["loss"], label="loss")
 plt.legend()
@@ -147,13 +152,13 @@ if CATEGORICAL:
   # predict_y = predict_y.reshape(predict_y.shape[:2])
   plt.scatter(np.arange(len(test_y)), predict_y, label="predict(after)")
   plt.legend()
-  plt.savefig("categorical_predictions.png")  # カテゴリカル予測のプロットを保存
+  plt.savefig(f"{save_folder}/categorical_predictions.png")  # カテゴリカル予測のプロットを保存
 else:
   plt.scatter(np.arange(len(test_y)), test_y, label="dahai")
   predict_y = model.predict(test_x)
   predict_y = predict_y.reshape(predict_y.shape[:2])
   plt.scatter(np.arange(len(test_y)), predict_y, label="predict(after)")
   plt.legend()
-  plt.savefig("regression_predictions.png")  # 回帰予測のプロットを保存
+  plt.savefig(f"{save_folder}/regression_predictions.png")  # 回帰予測のプロットを保存
 
 
