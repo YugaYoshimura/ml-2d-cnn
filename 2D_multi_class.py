@@ -66,13 +66,25 @@ train_y = Y_shuffled[:split_index]
 test_x = X_shuffled[split_index:]
 test_y = Y_shuffled[split_index:]
 
+# データを4次元にリシェイプ (例: (サンプル数, 高さ, 幅, チャンネル数))
+train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)
+test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)
+
+# リシェイプ後のデータの形状を確認
+print(f"Reshaped X shape: {X.shape}")
+
 # データを訓練データとテストデータに分割
 train_x, test_x, train_y, test_y = train_test_split(X, Y, test_size=0.2, random_state=42)
 
 # データの前処理
-scaler = StandardScaler()
+scaler = StandardScaler()  # scalerの定義
+train_x = train_x.reshape(train_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
+test_x = test_x.reshape(test_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
 train_x = scaler.fit_transform(train_x)
 test_x = scaler.transform(test_x)
+train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)  # 元の形状に戻す
+test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)  # 元の形状に戻すに戻す
+test_x = test_x.reshape(test_x.shape[0], X.shape[1], 1, 1)  # 元の形状に戻す
 
 # 学習モデル作り
 input_shape = train_x.shape[1:]
