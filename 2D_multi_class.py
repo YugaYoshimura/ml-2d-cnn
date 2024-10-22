@@ -41,7 +41,6 @@ Y = [item[1] for item in data]
 X = np.array(X)
 Y = np.array(Y)
 
-"""
 # データの形状を確認
 print(f"Original X shape: {X.shape}")
 print(f"Original Y shape: {Y.shape}")
@@ -49,14 +48,12 @@ print(f"Original Y shape: {Y.shape}")
 # Xの最初の5行を表示
 print("First 5 rows of X:")
 print(X[:5])
-"""
 
 # 各要素を二次元にリシェイプ
 X_pad = np.zeros((X.shape[0], 15))
 X = np.append(X, X_pad, axis=1)
 X = X.reshape(X.shape[0], 22, 23, 1)
 
-"""
 # リシェイプ後のデータの形状を確認
 print(f"Reshaped X shape: {X.shape}")
 print(f"Reshaped Y shape: {Y.shape}")
@@ -64,7 +61,6 @@ print(f"Reshaped Y shape: {Y.shape}")
 # Xの最初の5行を表示
 print("First 5 rows of X:")
 print(X[:5])
-"""
 
 # データをランダムにシャッフル
 idx_list = np.arange(len(X))
