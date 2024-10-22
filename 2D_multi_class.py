@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import codecs as cd
 import os
 import argparse
-
+import sys
 from const_pai import code2disphai, code2hai
 
 from sklearn.preprocessing import StandardScaler
@@ -41,16 +41,30 @@ Y = [item[1] for item in data]
 X = np.array(X)
 Y = np.array(Y)
 
+"""
 # データの形状を確認
 print(f"Original X shape: {X.shape}")
 print(f"Original Y shape: {Y.shape}")
 
-# データを二次元にリシェイプ
-X = X.reshape(X.shape[0], -1)
+# Xの最初の5行を表示
+print("First 5 rows of X:")
+print(X[:5])
+"""
 
+# 各要素を二次元にリシェイプ
+X_pad = np.zeros((X.shape[0], 15))
+X = np.append(X, X_pad, axis=1)
+X = X.reshape(X.shape[0], 22, 23, 1)
+
+"""
 # リシェイプ後のデータの形状を確認
 print(f"Reshaped X shape: {X.shape}")
 print(f"Reshaped Y shape: {Y.shape}")
+
+# Xの最初の5行を表示
+print("First 5 rows of X:")
+print(X[:5])
+"""
 
 # データをランダムにシャッフル
 idx_list = np.arange(len(X))
@@ -67,8 +81,8 @@ test_x = X_shuffled[split_index:]
 test_y = Y_shuffled[split_index:]
 
 # データを4次元にリシェイプ (例: (サンプル数, 高さ, 幅, チャンネル数))
-train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)
-test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)
+#train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)
+#test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)
 
 # リシェイプ後のデータの形状を確認
 print(f"Reshaped X shape: {X.shape}")
@@ -77,17 +91,18 @@ print(f"Reshaped X shape: {X.shape}")
 train_x, test_x, train_y, test_y = train_test_split(X, Y, test_size=0.2, random_state=42)
 
 # データの前処理
-scaler = StandardScaler()  # scalerの定義
-train_x = train_x.reshape(train_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
-test_x = test_x.reshape(test_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
-train_x = scaler.fit_transform(train_x)
-test_x = scaler.transform(test_x)
-train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)  # 元の形状に戻す
-test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)  # 元の形状に戻すに戻す
-test_x = test_x.reshape(test_x.shape[0], X.shape[1], 1, 1)  # 元の形状に戻す
+#scaler = StandardScaler()  # scalerの定義
+#train_x = train_x.reshape(train_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
+#test_x = test_x.reshape(test_x.shape[0], -1)  # 2次元にリシェイプしてスケーリング
+#train_x = scaler.fit_transform(train_x)
+#test_x = scaler.transform(test_x)
+#train_x = train_x.reshape(train_x.shape[0], train_x.shape[1], 1, 1)  # 元の形状に戻す
+#test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)  # 元の形状に戻すに戻す
+#test_x = test_x.reshape(test_x.shape[0], X.shape[1], 1, 1)  # 元の形状に戻す
 
 # 学習モデル作り
 input_shape = train_x.shape[1:]
+print(input_shape)
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
