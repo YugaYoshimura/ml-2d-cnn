@@ -42,12 +42,8 @@ X = np.array(X)
 Y = np.array(Y)
 
 # データの形状を確認
-print(f"Original X shape: {X.shape}")
-print(f"Original Y shape: {Y.shape}")
-
-# Xの最初の5行を表示
-print("First 5 rows of X:")
-print(X[:5])
+#print(f"Original X shape: {X.shape}")
+#print(f"Original Y shape: {Y.shape}")
 
 # 各要素を二次元にリシェイプ
 X_pad = np.zeros((X.shape[0], 15))
@@ -55,12 +51,8 @@ X = np.append(X, X_pad, axis=1)
 X = X.reshape(X.shape[0], 22, 23, 1)
 
 # リシェイプ後のデータの形状を確認
-print(f"Reshaped X shape: {X.shape}")
-print(f"Reshaped Y shape: {Y.shape}")
-
-# Xの最初の5行を表示
-print("First 5 rows of X:")
-print(X[:5])
+#print(f"Reshaped X shape: {X.shape}")
+#print(f"Reshaped Y shape: {Y.shape}")
 
 # データをランダムにシャッフル
 idx_list = np.arange(len(X))
@@ -81,7 +73,7 @@ test_y = Y_shuffled[split_index:]
 #test_x = test_x.reshape(test_x.shape[0], test_x.shape[1], 1, 1)
 
 # リシェイプ後のデータの形状を確認
-print(f"Reshaped X shape: {X.shape}")
+#print(f"Reshaped X shape: {X.shape}")
 
 # データを訓練データとテストデータに分割
 train_x, test_x, train_y, test_y = train_test_split(X, Y, test_size=0.2, random_state=42)
