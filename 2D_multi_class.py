@@ -107,7 +107,7 @@ else:
     model.compile(loss="mse", optimizer="adam")
 
 # 学習させる
-hist = model.fit(train_x, train_y, batch_size=16, epochs=1, verbose=1)
+hist = model.fit(train_x, train_y, batch_size=16, epochs=100, verbose=1)
 history = hist.history
 plt.figure(figsize=(10, 6))
 plt.scatter(hist.epoch, history["loss"], label="loss")
