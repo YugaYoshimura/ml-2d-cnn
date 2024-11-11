@@ -145,6 +145,7 @@ class Kyoku:
         for player_name in self.player_names:
             self.players[player_name].show()
 
+# 全部の情報を入れたデータを返す関数
     def make_tr_data(self):
         point_threshold = (-12000, -4000, 0, 4000, 12000)
         trdata = []
@@ -201,7 +202,26 @@ class Kyoku:
 
         return trdata
 
-            
 
+# 手牌と副露だけを入れたデータを返す関数
+    def make_tr_data2(self):
+        tr_data2 = []
+        if 0 < len(self.teban):
+            teban_player = self.teban[-1]
+
+            # 手牌は自分のものだけ追加
+            tr_data2.extend(teban_player.make_tehai())
+
+            base_idx = self.player_names.index(teban_player.name)
+            # base_point = teban_player.point
+            for add_idx in range(4):
+                idx = (base_idx + add_idx) % 4
+                player_name = self.player_names[idx]
+                p = self.players[player_name]
+
+                # 副露を追加
+                tr_data2.extend(p.make_furo())
+
+        return tr_data2
 
 

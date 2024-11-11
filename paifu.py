@@ -85,7 +85,7 @@ if __name__ == "__main__":
     with open("data.pkl", "wb") as f:
         pickle.dump(hoge, f)
 
-"""
+
 
 #エラーを無視して進める方
 if __name__ == "__main__":
@@ -113,5 +113,50 @@ if __name__ == "__main__":
     #print(hoge)
     with open("data.pkl", "wb") as f:
         pickle.dump(hoge, f)
+"""
 
+# 手牌と捨て牌のデータだけで学習する関数
+def show_kyoku2(kyoku_data):
+    all_data = []
+    kyoku = Kyoku(kyoku_data)
+    while True:
+        kyoku.check_sutehai()
+        if kyoku.is_sutehai:
+            #print("--------------------")
+            #kyoku.show()
+            trdata = kyoku.make_tr_data2()
+        playing = kyoku.step()
+        if kyoku.is_sutehai:
+            #print(f"sutehai: {code2disphai[kyoku.sutehai]}")
+            sutehai = kyoku.sutehai
+            all_data.append([trdata,sutehai])
+        if not playing:
+            break
+    return all_data
 
+#エラーを無視して進める方
+if __name__ == "__main__":
+    args = parse_args()
+    hoge = []
+    E = []
+    for file in args.files:
+        json_data = load_paifu(file)
+        print(f"file: {file}")
+    
+        for kyoku_num in range(count_kyoku(json_data)):
+            try:
+                print(f"kyoku_num: {kyoku_num} =======================")
+                kyoku_data = extract_one_kyoku(json_data, kyoku_num)
+                train_kyoku_data = show_kyoku2(kyoku_data)
+                hoge.extend(train_kyoku_data)
+            except Exception as e:
+                print(f"Error: {e} kyoku_num: {kyoku_num}")
+                E.append(kyoku_num)
+                E.append(file)
+                E.append(e)
+                continue
+    print(E)
+
+    # print(hoge)
+    with open("data_simple.pkl", "wb") as f:
+        pickle.dump(hoge, f)

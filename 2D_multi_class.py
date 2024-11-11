@@ -92,11 +92,11 @@ train_x, test_x, train_y, test_y = train_test_split(X, Y, test_size=0.2, random_
 input_shape = train_x.shape[1:]
 print(input_shape)
 model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+model.add(tf.keras.layers.Conv2D(32, (5, 5), activation='relu', input_shape=input_shape))
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
 model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
 model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
-model.add(tf.keras.layers.Conv2D(128, (3, 3), activation='relu'))
+model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(128, activation='relu'))
 if CATEGORICAL:
@@ -107,13 +107,13 @@ else:
     model.compile(loss="mse", optimizer="adam")
 
 # 学習させる
-hist = model.fit(train_x, train_y, batch_size=16, epochs=100, verbose=1)
+hist = model.fit(train_x, train_y, batch_size=16, epochs=1, verbose=1)
 history = hist.history
 plt.figure(figsize=(10, 6))
 plt.scatter(hist.epoch, history["loss"], label="loss")
 plt.legend()
 plt.savefig(os.path.join(save_folder, "loss.png"))  # プロットを保存
-plt.show()
+#plt.show()
 
 # 学習後の予測をプロット
 if CATEGORICAL:
@@ -135,20 +135,20 @@ else:
     plt.legend()
     plt.savefig(os.path.join(save_folder, "regression_predictions_after.png"))  # 回帰予測のプロットを保存
 
-plt.show()
+#plt.show()
 
 # 予測結果のヒストグラムをプロット
 plt.figure(figsize=(10, 6))
 plt.hist(predict_y, bins=50, alpha=0.7, label="predict(after)")
 plt.legend()
 plt.savefig(os.path.join(save_folder, "predictions_histogram.png"))  # ヒストグラムを保存
-plt.show()
+#plt.show()
 
 # 予測結果のボックスプロットをプロット
 plt.figure(figsize=(10, 6))
 plt.boxplot(predict_y, vert=False)
 plt.title("Predictions Boxplot")
 plt.savefig(os.path.join(save_folder, "predictions_boxplot.png"))  # ボックスプロットを保存
-plt.show()
+#plt.show()
 
 
