@@ -124,7 +124,6 @@ class Player:
     def normal_hai_code(self, hai):
         return hai / (len(code2disphai) - 1)
 
-
     def make_tehai(self):
         tehai_data = [self.normal_hai_code(self.tehai[idx]) if idx < len(self.tehai) else 0.0 for idx in range(13)]
         return tehai_data

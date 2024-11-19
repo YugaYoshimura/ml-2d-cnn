@@ -19,6 +19,7 @@ class Kyoku:
         self.teban = []
         self.is_sutehai = False
         self.sutehai = []
+        self.name = []
 
         # fmt: off
         self.commands = {
@@ -36,9 +37,15 @@ class Kyoku:
             "richi":      self.do_richi,
             "uradora":    self.do_dora,
             "agari":      self.do_dummy,
+            "player":     self.do_name,
         }
 
     # fmt: on
+
+    def do_name(self, args):
+        name = args[1]
+        self.name[name] = {"name": name}  # プレイヤー情報を辞書に追加
+
 
     def get_player(self, name):
         player = self.players[name]

@@ -28,7 +28,7 @@ CATEGORICAL = True
 
 
 # ここでdata.pklを読み込む
-with open('data.pkl', 'rb') as f:
+with open('data_simple.pkl', 'rb') as f:
     data = pickle.load(f)
 
 # ここでdata.pklの中身を確認する
@@ -97,13 +97,14 @@ test_y = np.array(test_y)
 
 
 input_shape = train_x.shape[1:]
+print(input_shape)
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Conv1D(32, 5, activation='relu',input_shape=input_shape))
-model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
+#model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
 model.add(tf.keras.layers.Conv1D(64, 5, activation='relu'))
-model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
+#model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
 model.add(tf.keras.layers.Conv1D(128, 5, activation='relu'))
-model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
+#model.add(tf.keras.layers.MaxPooling1D(pool_size=3))  # MaxPooling1Dレイヤーを追加
 # model.add(tf.keras.layers.Dense(16,activation='relu'))
 model.add(tf.keras.layers.Flatten())
 if CATEGORICAL:
@@ -136,7 +137,7 @@ plt.savefig(f"{save_folder}/before_learning.png")  # プロットを保存
 """
 
 # 学習させる
-hist = model.fit(train_x, train_y, batch_size=16, epochs=1, verbose=1)
+hist = model.fit(train_x, train_y, batch_size=16, epochs=100, verbose=1)
 history = hist.history
 plt.scatter(hist.epoch, history["loss"], label="loss")
 plt.legend()
