@@ -8,7 +8,8 @@ sutehai_flags = {
 }
 
 class Player:
-    def __init__(self, name, kyoku):
+    def __init__(self, pid, name, kyoku):
+        self.id = pid
         self.name = name
         self.tehai = []
         self.tsumo = 0

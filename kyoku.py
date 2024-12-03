@@ -2,11 +2,11 @@ from player import Player
 from const_pai import code2hai, code2disphai
 
 class Kyoku:
-    def __init__(self, kyoku_data: list):
-        self.player_names = ["A0", "B0", "C0", "D0"]
+    def __init__(self, player_names: dict, kyoku_data: list):
+        self.player_ids = ["A0", "B0", "C0", "D0"]
         self.players = {}
-        for player_name in self.player_names:
-            self.players[player_name] = Player(player_name, self)
+        for pid in self.player_ids:
+            self.players[pid] = Player(pid, player_names[pid], self)
 
         self.oya = None
         self.dora = []
@@ -19,7 +19,6 @@ class Kyoku:
         self.teban = []
         self.is_sutehai = False
         self.sutehai = []
-        self.name = []
 
         # fmt: off
         self.commands = {
@@ -37,18 +36,12 @@ class Kyoku:
             "richi":      self.do_richi,
             "uradora":    self.do_dora,
             "agari":      self.do_dummy,
-            "player":     self.do_name,
         }
 
     # fmt: on
 
-    def do_name(self, args):
-        name = args[1]
-        self.name[name] = {"name": name}  # プレイヤー情報を辞書に追加
-
-
-    def get_player(self, name):
-        player = self.players[name]
+    def get_player(self, pid):
+        player = self.players[pid]
         if len(self.teban) == 0 or self.teban[-1] != player:
             self.teban.append(player)
         return player
@@ -78,7 +71,7 @@ class Kyoku:
         self.bakaze = code2hai.index(args[4])
         self.kyoutaku = args[3]
         for idx in range(4):
-            self.players[self.player_names[idx]].kaze = code2hai.index(args[5:][idx])
+            self.players[self.player_ids[idx]].kaze = code2hai.index(args[5:][idx])
         return True
 
     def do_kyokuend(self, args):
@@ -149,8 +142,8 @@ class Kyoku:
         dora_disp = "".join([code2disphai[self.dora[idx] if idx < len(self.dora) else 0] for idx in range(4)])
         if 0 < len(self.teban):
             print("teban: " + self.teban[-1].name + " dora: " + dora_disp)
-        for player_name in self.player_names:
-            self.players[player_name].show()
+        for pid in self.player_ids:
+            self.players[pid].show()
 
 # 全部の情報を入れたデータを返す関数
     def make_tr_data(self):
@@ -162,12 +155,12 @@ class Kyoku:
             #手牌は自分のものだけ追加
             trdata.extend(teban_player.make_tehai())
 
-            base_idx = self.player_names.index(teban_player.name)
+            base_idx = self.player_ids.index(teban_player.id)
             base_point = teban_player.point
             for add_idx in range(4):
                 idx = (base_idx + add_idx) % 4
-                player_name = self.player_names[idx]
-                p = self.players[player_name]
+                pid = self.player_ids[idx]
+                p = self.players[pid]
                 
                 
                 #鳴きと捨て牌を追加
@@ -219,12 +212,12 @@ class Kyoku:
             # 手牌は自分のものだけ追加
             tr_data2.extend(teban_player.make_tehai())
 
-            base_idx = self.player_names.index(teban_player.name)
+            base_idx = self.player_ids.index(teban_player.id)
             # base_point = teban_player.point
             for add_idx in range(4):
                 idx = (base_idx + add_idx) % 4
-                player_name = self.player_names[idx]
-                p = self.players[player_name]
+                pid = self.player_ids[idx]
+                p = self.players[pid]
 
                 # 副露を追加
                 tr_data2.extend(p.make_furo())

@@ -115,16 +115,26 @@ if __name__ == "__main__":
         pickle.dump(hoge, f)
 """
 
-# 手牌と捨て牌のデータだけで学習する関数
-def show_kyoku2(kyoku_data):
+# 手牌と捨て牌のデータだけで学習する関数　＋　選手を指定できるようにした関数
+def show_kyoku2(player_names, kyoku_data):
     all_data = []
-    kyoku = Kyoku(kyoku_data)
+    kyoku = Kyoku(player_names, kyoku_data)
+
+    # saki_id を初期化、取得できなかった場合は None のまま
+    saki_id = None
+    for player_id, name in player_names.items():
+        if name == "黒沢 咲":
+            saki_id = player_id
+            print("Saki is " + saki_id)
+            break
+
     while True:
         kyoku.check_sutehai()
         if kyoku.is_sutehai:
             #print("--------------------")
             #kyoku.show()
-            trdata = kyoku.make_tr_data2()
+            if saki_id is not None:
+                trdata = kyoku.make_tr_data2()
         playing = kyoku.step()
         if kyoku.is_sutehai:
             #print(f"sutehai: {code2disphai[kyoku.sutehai]}")
@@ -132,6 +142,7 @@ def show_kyoku2(kyoku_data):
             all_data.append([trdata,sutehai])
         if not playing:
             break
+
     return all_data
 
 #エラーを無視して進める方
@@ -142,12 +153,17 @@ if __name__ == "__main__":
     for file in args.files:
         json_data = load_paifu(file)
         print(f"file: {file}")
+
+        player_names = {}
+        for entry in json_data:
+            if entry["cmd"] == "player":
+                player_names[entry["args"][0]] = entry["args"][1]
     
         for kyoku_num in range(count_kyoku(json_data)):
             try:
                 print(f"kyoku_num: {kyoku_num} =======================")
                 kyoku_data = extract_one_kyoku(json_data, kyoku_num)
-                train_kyoku_data = show_kyoku2(kyoku_data)
+                train_kyoku_data = show_kyoku2(player_names, kyoku_data)
                 hoge.extend(train_kyoku_data)
             except Exception as e:
                 print(f"Error: {e} kyoku_num: {kyoku_num}")
@@ -156,6 +172,7 @@ if __name__ == "__main__":
                 E.append(e)
                 continue
     print(E)
+    
 
     # print(hoge)
     with open("data_simple.pkl", "wb") as f:
